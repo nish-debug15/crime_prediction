@@ -1,218 +1,520 @@
-# AI Crime Prediction + Prevention System
+# 🔍 AI Crime Prediction + Prevention System
 
-Predicting where and when crimes are likely to occur using advanced machine learning, with a strong ethical foundation.
+> Predicting where and when crimes are likely to occur using advanced machine learning — with a strong ethical foundation.
+
+![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111+-green?logo=fastapi)
+![React Native](https://img.shields.io/badge/React_Native-0.74+-61DAFB?logo=react)
+![MySQL](https://img.shields.io/badge/MySQL-8.0+-orange?logo=mysql)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+![Ethics](https://img.shields.io/badge/Ethics-First-purple)
+
+---
+
+## 📌 Table of Contents
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [System Architecture](#system-architecture)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [API Reference](#api-reference)
+- [ML Pipeline](#ml-pipeline)
+- [Ethical Framework](#ethical-framework)
+- [Database Schema](#database-schema)
+- [Mobile App (React Native)](#mobile-app-react-native)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Disclaimer](#disclaimer)
+
+---
 
 ## Overview
 
-This system predicts crime hotspots and temporal patterns to assist law enforcement in proactive crime prevention. It uses spatio-temporal modeling, anomaly detection, and Bayesian inference while maintaining strict ethical standards.
+The **AI Crime Prediction + Prevention System** is an end-to-end platform that assists law enforcement agencies in proactive crime prevention. It uses spatio-temporal machine learning models, anomaly detection, and Bayesian inference to identify crime hotspots and temporal patterns — before crimes occur.
 
-### Key Features
+The system is designed with **transparency, fairness, and accountability** at its core. Every prediction is explainable, every model is auditable, and bias mitigation is not optional — it's built in.
 
-- Crime hotspot heatmaps with temporal animation
-- Real-time anomaly alerts with multi-channel notifications
-- Patrol optimization suggestions using ML
-- Explainable predictions with SHAP integration
-- Built-in bias detection and mitigation
+> ⚠️ This system is a **decision-support tool**, not a decision-making authority. All outputs must be reviewed by qualified human officers before any operational action is taken.
 
-## Team Structure
+---
 
-| Role | Responsibilities |
-|------|------------------|
-| Nishit Patel | Model development, training, optimization |
-| Pranav Adhikari | API development, data pipeline, infrastructure |
-| Unique Bhakta Shrestha | Dashboard, visualization, user interface |
-| Pragun Shrestha | Bias mitigation, data quality, compliance |
+## Key Features
 
-## Architecture
+| Feature | Description |
+|---|---|
+| 🗺️ **Crime Hotspot Heatmaps** | Interactive, temporally animated heatmaps of predicted crime zones |
+| 🚨 **Real-Time Anomaly Alerts** | Multi-channel push alerts (mobile, email, webhook) for spike detections |
+| 🚔 **Patrol Optimization** | ML-driven suggestions for optimal patrol routes and resource allocation |
+| 🧠 **Explainable AI (XAI)** | SHAP-based explanations for every prediction — no black boxes |
+| ⚖️ **Bias Detection & Mitigation** | Automated fairness audits against demographic and geographic proxies |
+| 📊 **Dashboard Analytics** | Real-time command-center dashboard with drill-down analytics |
+| 🔐 **Role-Based Access Control** | Granular RBAC — analysts, officers, admins, auditors |
+| 📁 **Audit Logging** | Immutable audit trail of all predictions, accesses, and overrides |
 
-The system follows a microservices architecture with:
+---
 
-- Client Layer: React web and mobile applications
-- API Gateway: FastAPI with authentication and rate limiting
-- Microservices: Prediction, Alert, Analytics, Ethics, Patrol, Data Ingestion
-- Data Layer: PostgreSQL, TimescaleDB, Redis, MongoDB, Elasticsearch
-- ML Layer: Spatio-temporal models, anomaly detection, Bayesian inference
+## System Architecture
 
-## ML Stack
+```
+┌─────────────────────────────────────────────────────┐
+│                   React Native App                  │
+│         (Officers / Analysts / Commanders)          │
+└──────────────────────┬──────────────────────────────┘
+                       │ HTTPS / REST
+┌──────────────────────▼──────────────────────────────┐
+│                  FastAPI Backend                    │
+│  ┌────────────┐  ┌─────────────┐  ┌─────────────┐  │
+│  │ Auth/RBAC  │  │ Prediction  │  │  Alert Mgr  │  │
+│  │  Module    │  │   Engine    │  │   Module    │  │
+│  └────────────┘  └──────┬──────┘  └─────────────┘  │
+│                         │                           │
+│  ┌──────────────────────▼──────────────────────┐   │
+│  │              ML Pipeline Service            │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌─────────────┐ │   │
+│  │  │  LGBM /  │ │ Bayesian │ │   Anomaly   │ │   │
+│  │  │  XGBoost │ │ Inference│ │  Detection  │ │   │
+│  │  └──────────┘ └──────────┘ └─────────────┘ │   │
+│  │  ┌──────────────────────────────────────┐   │   │
+│  │  │       SHAP Explainability Layer      │   │   │
+│  │  └──────────────────────────────────────┘   │   │
+│  │  ┌──────────────────────────────────────┐   │   │
+│  │  │     Bias Detection & Fairness Audit  │   │   │
+│  │  └──────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────┘   │
+└─────────────────────────┬───────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────┐
+│                    MySQL 8.0                        │
+│  crime_events │ predictions │ patrol_logs │ audits  │
+└─────────────────────────────────────────────────────┘
+```
 
-### Spatio-Temporal Models
-- Graph Neural Networks for spatial dependencies
-- Transformer encoders for temporal patterns
-- Multi-step forecasting (1-hour to 7-day predictions)
-
-### Anomaly Detection
-- Isolation Forest for general anomaly detection
-- Autoencoder for pattern deviation
-- DBSCAN for spatial clustering
-- LSTM Autoencoder for temporal anomalies
-
-### Bayesian Models
-- Uncertainty quantification for predictions
-- Confidence intervals for risk scores
-- Prior knowledge incorporation
+---
 
 ## Tech Stack
 
 ### Backend
-- Python 3.9+, FastAPI, PostgreSQL, TimescaleDB, Redis, Celery, MongoDB, Elasticsearch
+- **Python 3.11+** — Core language
+- **FastAPI** — Async REST API framework
+- **SQLAlchemy 2.0** — ORM with async support
+- **Celery + Redis** — Background tasks & job queue
+- **scikit-learn, LightGBM, XGBoost** — ML models
+- **SHAP** — Explainability
+- **PyMC / Stan** — Bayesian inference
+- **Geopandas + Shapely** — Geospatial processing
+- **Pydantic v2** — Data validation
 
-### Machine Learning
-- PyTorch, PyTorch Geometric, scikit-learn, XGBoost, Pyro, SHAP, Fairlearn
+### Database
+- **MySQL 8.0** — Primary relational store
+- **Redis** — Caching & message broker
 
-### Frontend
-- React 18, TypeScript, Mapbox GL, D3.js, Redux Toolkit, Tailwind CSS
+### Mobile (Frontend)
+- **React Native 0.74+** — Cross-platform mobile (iOS + Android)
+- **Expo** — Development toolchain
+- **React Navigation** — Routing
+- **Mapbox Maps SDK** — Interactive map rendering
+- **React Query** — Server state management
+- **Zustand** — Client state management
 
 ### Infrastructure
-- Vercel (deployment), GitHub Actions (CI/CD), Prometheus, Grafana
+- **Docker + Docker Compose** — Containerisation
+- **Nginx** — Reverse proxy
+- **GitHub Actions** — CI/CD
 
-## Project Timeline
+---
 
-### Phase 1: Foundation (Weeks 1-4)
-- Project setup and data collection
-- ETL pipeline development
-- Feature engineering framework
+## Project Structure
 
-### Phase 2: Core Development (Weeks 5-12)
-- ML model development
-- Backend API services
-- Frontend dashboard
-- Service integration
+```
+ai-crime-prediction/
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── v1/
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── predictions.py
+│   │   │   │   ├── hotspots.py
+│   │   │   │   ├── alerts.py
+│   │   │   │   ├── patrols.py
+│   │   │   │   └── audit.py
+│   │   │   └── deps.py
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── security.py
+│   │   │   └── logging.py
+│   │   ├── db/
+│   │   │   ├── models.py
+│   │   │   ├── session.py
+│   │   │   └── migrations/
+│   │   ├── ml/
+│   │   │   ├── pipeline.py
+│   │   │   ├── hotspot_model.py
+│   │   │   ├── temporal_model.py
+│   │   │   ├── anomaly_detector.py
+│   │   │   ├── bayesian_inference.py
+│   │   │   ├── explainability.py
+│   │   │   └── bias_audit.py
+│   │   ├── services/
+│   │   │   ├── prediction_service.py
+│   │   │   ├── alert_service.py
+│   │   │   └── patrol_optimizer.py
+│   │   └── main.py
+│   ├── tests/
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── mobile/
+│   ├── src/
+│   │   ├── screens/
+│   │   │   ├── DashboardScreen.tsx
+│   │   │   ├── HeatmapScreen.tsx
+│   │   │   ├── AlertsScreen.tsx
+│   │   │   ├── PatrolScreen.tsx
+│   │   │   └── ExplainScreen.tsx
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── store/
+│   │   ├── api/
+│   │   └── navigation/
+│   ├── app.json
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── infra/
+│   ├── docker-compose.yml
+│   ├── nginx/
+│   └── .env.example
+│
+├── docs/
+│   ├── ETHICAL_FRAMEWORK.md
+│   ├── BIAS_AUDIT_REPORT.md
+│   ├── API_SPEC.yaml
+│   └── DATA_DICTIONARY.md
+│
+├── scripts/
+│   ├── seed_data.py
+│   ├── train_models.py
+│   └── run_bias_audit.py
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── deploy.yml
+│
+├── README.md
+├── CONTRIBUTING.md
+└── LICENSE
+```
 
-### Phase 3: Ethics and Validation (Weeks 13-16)
-- Bias detection implementation
-- Explainability dashboard
-- Testing and validation
-
-### Phase 4: Deployment (Weeks 17-20)
-- Vercel deployment configuration
-- Production setup
-- Launch and monitoring
+---
 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.9+
-- Node.js 16+
-- PostgreSQL 14+
-- Redis 6.2+
 
-### Installation
+- Python 3.11+
+- Node.js 20+ & npm
+- MySQL 8.0
+- Redis 7+
+- Docker & Docker Compose (recommended)
 
-1. Clone the repository
-```
-git clone https://github.com/nish-debug15/crime_prediction.git
-cd crime-prediction
+---
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-org/ai-crime-prediction.git
+cd ai-crime-prediction
 ```
 
-2. Set up Python environment
-```
+---
+
+### 2. Backend Setup
+
+```bash
+cd backend
+
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
-```
 
-3. Configure environment variables
-```
-cp .env.example .env
-```
+# Copy environment config
+cp ../infra/.env.example .env
+# Edit .env with your DB credentials and secrets
 
-4. Start the backend
-```
+# Run DB migrations
+alembic upgrade head
+
+# Seed sample data (optional, for development)
+python ../scripts/seed_data.py
+
+# Train models (required before first run)
+python ../scripts/train_models.py
+
+# Start the API server
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-5. Start the frontend
-```
-cd frontend
+The API will be available at `http://localhost:8000`  
+Interactive docs at `http://localhost:8000/docs`
+
+---
+
+### 3. Mobile App Setup
+
+```bash
+cd mobile
+
+# Install dependencies
 npm install
-npm run dev
+
+# Start Expo dev server
+npx expo start
 ```
 
-### Access Points
-- API Documentation: http://localhost:8000/docs
-- Dashboard: http://localhost:3000
+Scan the QR code with Expo Go (Android/iOS) or run on a simulator.
 
-## Data Sources
+---
 
-- Police records (historical crime data)
-- Weather API (meteorological data)
-- Census data (demographics)
-- OpenStreetMap (geographic data)
-- Event calendars (public events)
+### 4. Docker Compose (Full Stack)
 
-## API Endpoints
+```bash
+cd infra
+
+# Copy and configure environment
+cp .env.example .env
+# Edit .env with your secrets
+
+# Build and start all services
+docker compose up --build
+
+# Run migrations inside container
+docker compose exec backend alembic upgrade head
+```
+
+Services will be available at:
+- API: `http://localhost:8000`
+- API Docs: `http://localhost:8000/docs`
+- Redis: `localhost:6379`
+- MySQL: `localhost:3306`
+
+---
+
+## Environment Variables
+
+```env
+# App
+APP_ENV=development
+SECRET_KEY=your-secret-key-here
+API_VERSION=v1
+
+# Database
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=crime_prediction_db
+DB_USER=root
+DB_PASSWORD=yourpassword
+
+# Redis
+REDIS_URL=redis://localhost:6379/0
+
+# ML
+MODEL_PATH=./models/
+RETRAIN_SCHEDULE_CRON=0 2 * * *   # 2AM daily
+
+# Notifications
+SMTP_HOST=smtp.yourprovider.com
+SMTP_PORT=587
+SMTP_USER=alerts@yourdomain.com
+SMTP_PASSWORD=yourpassword
+FCM_SERVER_KEY=your-firebase-cloud-messaging-key
+
+# Ethics & Compliance
+BIAS_AUDIT_ENABLED=true
+BIAS_AUDIT_THRESHOLD=0.1        # Max allowed disparity
+AUDIT_LOG_RETENTION_DAYS=365
+```
+
+---
+
+## API Reference
+
+All endpoints are prefixed with `/api/v1`. Authentication uses JWT Bearer tokens.
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/auth/login` | Obtain access + refresh tokens |
+| `POST` | `/auth/refresh` | Refresh access token |
+| `POST` | `/auth/logout` | Revoke token |
 
 ### Predictions
-- GET /api/v1/predictions/area - Crime prediction for area
-- GET /api/v1/predictions/explain - Prediction with explanation
-- POST /api/v1/predictions/batch - Batch predictions
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/predictions/hotspots` | Get current hotspot predictions with heatmap data |
+| `GET` | `/predictions/temporal` | Get temporal crime probability for a time window |
+| `GET` | `/predictions/{id}/explain` | Get SHAP explanation for a specific prediction |
+| `POST` | `/predictions/query` | Run a custom prediction query with filters |
 
 ### Alerts
-- GET /api/v1/alerts/active - Active alerts
-- POST /api/v1/alerts/rules - Configure alert rules
 
-### Heatmaps
-- GET /api/v1/heatmap - Current heatmap data
-- GET /api/v1/heatmap/history - Historical heatmap
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/alerts` | List active anomaly alerts |
+| `GET` | `/alerts/{id}` | Get alert details |
+| `PATCH` | `/alerts/{id}/acknowledge` | Mark alert as acknowledged |
+| `POST` | `/alerts/subscribe` | Subscribe to alert channels |
 
-### Patrol Optimization
-- GET /api/v1/patrol/recommendations - Patrol recommendations
-- POST /api/v1/patrol/optimize - Optimize patrol routes
+### Patrol
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/patrols/optimize` | Get ML-optimized patrol route suggestions |
+| `POST` | `/patrols/log` | Log patrol activity |
+| `GET` | `/patrols/coverage` | Get area coverage analytics |
+
+### Audit
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/audit/logs` | Retrieve immutable audit logs (admin only) |
+| `GET` | `/audit/bias-report` | Latest bias audit report |
+| `POST` | `/audit/bias-report/run` | Trigger manual bias audit |
+
+Full OpenAPI spec available at `docs/API_SPEC.yaml`.
+
+---
+
+## ML Pipeline
+
+### Models Used
+
+**1. Spatio-Temporal Hotspot Model**
+- LightGBM / XGBoost ensemble
+- Features: grid cell coordinates, hour, day of week, month, weather, events, historical crime rates, demographic-neutral proxies
+- Output: Crime probability score per grid cell per time window
+
+**2. Bayesian Temporal Inference**
+- PyMC-based hierarchical model
+- Captures seasonality, trend, and uncertainty estimates
+- Outputs credible intervals alongside point estimates
+
+**3. Anomaly Detection**
+- Isolation Forest + statistical control charts
+- Flags unusual spikes in crime rates beyond baseline
+- Triggers real-time alerts
+
+**4. Patrol Optimizer**
+- Constraint-based optimization (PuLP / OR-Tools)
+- Inputs: hotspot predictions, officer availability, patrol constraints
+- Outputs: suggested routes with expected coverage impact
+
+### Explainability
+
+Every prediction is accompanied by a SHAP waterfall chart showing the contribution of each feature to the output. Officers can always answer **"why was this flagged?"**
+
+```python
+# Example: generating a SHAP explanation
+from ml.explainability import SHAPExplainer
+
+explainer = SHAPExplainer(model=hotspot_model)
+explanation = explainer.explain(input_features=grid_cell_features)
+# Returns: feature contributions, base value, prediction value
+```
+
+### Retraining
+
+Models are retrained nightly via a Celery scheduled task using the latest available crime data. Training metrics and bias audit results are logged and versioned.
+
+---
 
 ## Ethical Framework
 
-### Bias Detection
-- Demographic parity analysis
-- Equal opportunity metrics
-- Disparate impact testing
-- Automated mitigation strategies
+This system operates under a strict ethical policy. Full details in `docs/ETHICAL_FRAMEWORK.md`.
 
-### Privacy Protection
-- k-anonymity (k >= 5)
-- Differential privacy
-- Geographic aggregation
-- Data retention policies
+### Core Principles
 
-### Transparency
-- Explainable predictions
-- Audit logging
-- Human oversight
-- Regular fairness audits
+**1. Human Oversight Is Mandatory**  
+No automated action is ever taken on predictions. All outputs are advisory. A qualified officer must review and approve before any deployment decision.
 
-## Testing
+**2. No Individual Profiling**  
+The system predicts for geographic areas and time windows — never for individuals. Personal data is not processed or stored.
 
-Run tests with:
-```
-pytest tests/ -v --cov=app
-```
+**3. Protected Attribute Exclusion**  
+Race, ethnicity, religion, gender, and immigration status are **never used** as model features — directly or as proxies.
 
-Test coverage targets:
-- Backend API: 90%
-- ML Models: 85%
-- Frontend: 80%
+**4. Transparency by Default**  
+Every prediction includes a human-readable SHAP explanation. Black-box outputs are not permitted.
 
-## Deployment
+**5. Bias Auditing**  
+Automated fairness audits run on every model version before deployment. Disparate impact is measured across geographic and demographic dimensions. Models exceeding the bias threshold are blocked from deployment.
 
-The application is deployed on Vercel with:
-- Automatic deployments from main branch
-- Preview deployments for pull requests
-- Environment variable management
-- Custom domain configuration
+**6. Right to Contestation**  
+Affected parties have the right to contest predictions. An independent audit process is available.
+
+**7. Data Minimisation**  
+Only the minimum necessary data is collected. Personal identifiers are never stored. Data is retained only as long as legally required.
+
+**8. Accountability**  
+Every prediction access, override, and action is recorded in an immutable audit log accessible to oversight bodies.
+
+---
+
+## Mobile App (React Native)
+
+### Screens
+
+| Screen | Description |
+|--------|-------------|
+| **Dashboard** | Live summary — active alerts, hotspot count, patrol coverage % |
+| **Heatmap** | Animated spatio-temporal heatmap with time scrubber |
+| **Alerts** | Real-time anomaly alerts with acknowledge action |
+| **Patrol** | Patrol route suggestions with map overlay |
+| **Explain** | SHAP explanation viewer for any prediction |
+| **Audit Log** | Audit trail viewer (admin/auditor role only) |
+
+### Push Notifications
+
+Alerts are delivered via Firebase Cloud Messaging (FCM). Officers subscribe to specific grid zones. Notifications include severity, location, and a deep-link to the relevant alert screen.
+
+---
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Write tests
-5. Submit a pull request
+We welcome contributions! Please read `CONTRIBUTING.md` first.
 
-All PRs require 2 approvals and must pass CI/CD checks.
+### Guidelines
+
+1. Fork the repo and create your branch: `git checkout -b feature/your-feature`
+2. All ML changes must include a bias audit result in the PR
+3. Write tests for new API endpoints (pytest)
+4. Follow PEP 8 for Python, ESLint + Prettier for TypeScript
+5. Open a PR with a clear description of changes and ethical implications (if any)
+
+---
 
 ## License
 
-MIT License - see LICENSE file for details.
+This project is licensed under the **MIT License**. See `LICENSE` for details.
+
+---
 
 ## Disclaimer
 
-This system assists law enforcement in crime prevention and resource allocation. It should not be the sole basis for law enforcement decisions. All predictions must be reviewed by trained professionals and used in compliance with local laws and regulations.
+> This system is intended solely as a **decision-support tool** for trained law enforcement professionals. Predictions are probabilistic in nature and should never be the sole basis for law enforcement action. The developers disclaim all liability for misuse. Deployment must comply with all applicable local, national, and international laws, including data protection regulations (e.g. GDPR, PDPA, CCPA). An independent ethics review is strongly recommended before any real-world deployment.
+
+---
+
+<div align="center">
+  Built with intention. Deployed with caution. Audited always.
+</div>
