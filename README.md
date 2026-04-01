@@ -176,11 +176,11 @@ Raw CSV → Clean & Preprocess → Feature Engineering → Train Model → Evalu
 
 This is a decision-support tool, not an automated system. A few hard rules:
 
-- 🚫 No individual profiling — predictions are for areas, not people
-- 🚫 Race, religion, ethnicity are never model features
-- ✅ Every prediction has a SHAP explanation attached
-- ✅ A basic disparate impact check runs after every model training
-- ✅ Human review is required before any real-world action
+- No individual profiling — predictions are for areas, not people
+- Race, religion, ethnicity are never model features
+- Every prediction has a SHAP explanation attached
+- A basic disparate impact check runs after every model training
+- Human review is required before any real-world action
 
 ---
 
