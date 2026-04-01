@@ -82,8 +82,8 @@ ai-crime-prediction/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/ai-crime-prediction.git
-cd ai-crime-prediction
+git clone https://github.com/nish-debug15/crime_prediction.git
+cd crime-prediction
 ```
 
 ### 2. Set up a virtual environment
