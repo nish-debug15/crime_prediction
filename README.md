@@ -1,4 +1,4 @@
-# AI Crime Prediction + Prevention System
+# Proactive AI Crime Prediction + Prevention System
 
 > Using machine learning to predict crime hotspots and help law enforcement act proactively — built with Python, deployed on Vercel.
 
