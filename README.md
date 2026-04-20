@@ -146,9 +146,7 @@ That's it — Vercel handles the rest.
 
 We use publicly available crime data. Good sources to start with:
 
-- [Chicago Crime Data](https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2)
-- [LA Crime Data](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8)
-- [UK Police Data](https://data.police.uk/)
+- [Chicago Crime Data](https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2/about_data)
 
 Download a CSV and drop it into `data/`.
 
