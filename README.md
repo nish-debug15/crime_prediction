@@ -46,7 +46,7 @@ No separate frontend framework — everything is Python. Simple and clean.
 ## Project Structure
 
 ```
-ai-crime-prediction/
+crime-prediction/
 │
 ├── api/
 │   └── index.py          # FastAPI app (Vercel entry point)
