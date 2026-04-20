@@ -65,7 +65,7 @@ crime-prediction/
 │   └── style.css
 │
 ├── data/
-│   └── sample_crimes.csv # Sample dataset (Chicago / LA open data)
+│   └── LA_dataset.csv  (LA open data)
 │
 ├── models/
 │   └── hotspot_model.pkl # Saved trained model
@@ -144,11 +144,11 @@ That's it — Vercel handles the rest.
 
 ## Dataset
 
-We use publicly available crime data. Good sources to start with:
+We have used publicly available crime data:
 
-- [Chicago Crime Data](https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2/about_data)
+- [LA Crime Dataset 2020-2024](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-2024/2nrs-mtv8/about_data)
 
-Download a CSV and drop it into `data/`.
+Download CSV and drop it into `data/`.
 
 ---
 
