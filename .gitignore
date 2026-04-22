@@ -1,37 +1,21 @@
-# =========================
-# 🐍 Python
-# =========================
+.vscode/
+
+*.log
+*.tmp
+
+models/
+data/
+*.pkl
+*.csv
+
 __pycache__/
+*.py[cod]
 *.pyc
 *.pyo
 *.pyd
 
-# =========================
-# 📦 Virtual Environment
-# =========================
-venv/
-crime_prediction/
-.env/
 
-# =========================
-# 📊 Data Files (VERY IMPORTANT)
-# =========================
-*.csv
-*.xlsx
-*.json
+.venv/
+env/
 
-# =========================
-# 📓 Jupyter Notebook checkpoints
-# =========================
 .ipynb_checkpoints/
-
-# =========================
-# 💻 VS Code
-# =========================
-.vscode/
-
-# =========================
-# 🗂 Logs & temp files
-# =========================
-*.log
-*.tmp
