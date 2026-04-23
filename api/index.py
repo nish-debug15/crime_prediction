@@ -17,8 +17,7 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/")
 async def dashboard(request: Request):
     """Renders the interactive Crime Heatmap Dashboard"""
-    return templates.TemplateResponse("index.html", {"request": request})
-
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.get("/predict")
 async def api_predict(lat: float, lon: float, hour: int):
@@ -28,8 +27,7 @@ async def api_predict(lat: float, lon: float, hour: int):
     """
     return get_hotspot_prediction(lat, lon, hour)
 
-
 @app.get("/explain")
 async def explain_model(request: Request):
     """Renders the SHAP Explainability page with the importance plot"""
-    return templates.TemplateResponse("explain.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="explain.html")
