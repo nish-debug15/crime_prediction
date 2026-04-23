@@ -1,10 +1,12 @@
-import joblib
-import pandas as pd
 import os
 from datetime import datetime
+import pandas as pd
+import joblib
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "../models/hotspot_model.pkl")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "../data/prediction_logs.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MODEL_PATH = os.path.join(BASE_DIR, "../models/hotspot_model.pkl")
+LOG_PATH = os.path.join(BASE_DIR, "../data/prediction_logs.csv")
 
 def log_prediction(lat, lon, hour, result):
     """
