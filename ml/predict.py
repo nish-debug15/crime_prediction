@@ -82,6 +82,5 @@ def get_hotspot_prediction(lat, lon, hour):
         return {"error": str(e)}
 
 if __name__ == "__main__":
-    # Test a prediction
     print(get_hotspot_prediction(34.04, -118.26, 22))
     print(f"Prediction saved to SQLite Database at: {DB_PATH}")
