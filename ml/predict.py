@@ -5,15 +5,10 @@ import pandas as pd
 import joblib
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 MODEL_PATH = os.path.join(BASE_DIR, "../models/hotspot_model.pkl")
 DB_PATH = os.path.join(BASE_DIR, "../data/predictions.db")
 
 def init_db():
-    """
-    Initializes the SQLite Database. 
-    Creates the 'logs' table automatically if it doesn't exist.
-    """
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
@@ -23,6 +18,9 @@ def init_db():
             lat REAL,
             lon REAL,
             hour INTEGER,
+            day_of_week INTEGER,
+            month INTEGER,
+            is_weekend INTEGER,
             is_hotspot BOOLEAN,
             probability REAL,
             status TEXT
@@ -31,23 +29,17 @@ def init_db():
     conn.commit()
     conn.close()
 
-def log_prediction_sql(lat, lon, hour, result):
-    """
-    Saves the prediction request and result to the SQLite database.
-    Uses parameterized queries (?, ?) to prevent SQL injection.
-    """
+def log_prediction_sql(lat, lon, hour, day_of_week, month, is_weekend, result):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO logs (timestamp, lat, lon, hour, is_hotspot, probability, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO logs (timestamp, lat, lon, hour, day_of_week, month, is_weekend, is_hotspot, probability, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
-        lat, 
-        lon, 
-        hour, 
-        result["is_hotspot"], 
-        result["probability"], 
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        lat, lon, hour, day_of_week, month, is_weekend,
+        result["is_hotspot"],
+        result["probability"],
         result["status"]
     ))
     conn.commit()
@@ -55,14 +47,17 @@ def log_prediction_sql(lat, lon, hour, result):
 
 init_db()
 
-def get_hotspot_prediction(lat, lon, hour):
+def get_hotspot_prediction(lat, lon, hour, day_of_week, month, is_weekend):
     try:
         model = joblib.load(MODEL_PATH)
-        input_data = pd.DataFrame([[lat, lon, hour]], columns=['lat_grid', 'lon_grid', 'hour'])
-        
+        input_data = pd.DataFrame(
+            [[lat, lon, hour, day_of_week, month, is_weekend]],
+            columns=['lat_grid', 'lon_grid', 'hour', 'day_of_week', 'month', 'is_weekend']
+        )
+
         prediction = model.predict(input_data)[0]
         probability = model.predict_proba(input_data)[0][1]
-        
+
         result = {
             "is_hotspot": bool(prediction),
             "probability": round(float(probability), 4),
@@ -74,13 +69,23 @@ def get_hotspot_prediction(lat, lon, hour):
                 "f1_score": "0.78"
             }
         }
-        
-        log_prediction_sql(lat, lon, hour, result)
-        
+
+        log_prediction_sql(lat, lon, hour, day_of_week, month, is_weekend, result)
         return result
+
     except Exception as e:
         return {"error": str(e)}
 
 if __name__ == "__main__":
-    print(get_hotspot_prediction(34.04, -118.26, 22))
-    print(f"Prediction saved to SQLite Database at: {DB_PATH}")
+    from datetime import datetime as dt
+    now = dt.now()
+    result = get_hotspot_prediction(
+        lat=34.04,
+        lon=-118.26,
+        hour=22,
+        day_of_week=now.weekday(),
+        month=now.month,
+        is_weekend=1 if now.weekday() >= 5 else 0
+    )
+    print(result)
+    print(f"Saved to: {DB_PATH}")
