@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Explainability</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans p-8">
+    <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-xl text-center">
+        <h1 class="text-4xl font-extrabold mb-2 text-blue-900">SHAP AI Explainability</h1>
+        <p class="mb-8 text-lg text-gray-600">Understanding the "Why" behind the Machine Learning predictions.</p>
+        
+        <div class="bg-gray-50 p-4 rounded border mb-8">
+            <h2 class="text-xl font-bold text-left mb-2 border-b pb-2">How to read this chart:</h2>
+            <ul class="text-left text-gray-700 list-disc list-inside">
+                <li>This chart reveals how our LightGBM model makes decisions.</li>
+                <li>Features at the top (Hour and Latitude) have the most significant impact on crime predictions.</li>
+                <li>Colors represent the feature value (e.g., Red = Late night hour, Blue = Early morning).</li>
+            </ul>
+        </div>
+
+        <img src="/static/shap_summary.png" alt="SHAP Feature Importance" class="mx-auto border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition">
+        
+        <div class="mt-8">
+            <a href="/" class="bg-blue-700 text-white px-8 py-3 rounded font-bold shadow hover:bg-blue-600 transition">← Back to Live Map</a>
+        </div>
+    </div>
+</body>
+</html>
