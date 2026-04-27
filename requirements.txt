@@ -1,12 +1,9 @@
 fastapi
 uvicorn
-python-multipart
-jinja2
 pandas
-scikit-learn
 lightgbm
+scikit-learn
 joblib
 shap
-matplotlib
-seaborn
-plotly
+streamlit
+requests
