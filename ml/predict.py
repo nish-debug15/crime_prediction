@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from datetime import datetime
 import pandas as pd
 import joblib
@@ -6,26 +7,53 @@ import joblib
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 MODEL_PATH = os.path.join(BASE_DIR, "../models/hotspot_model.pkl")
-LOG_PATH = os.path.join(BASE_DIR, "../data/prediction_logs.csv")
+DB_PATH = os.path.join(BASE_DIR, "../data/predictions.db")
 
-def log_prediction(lat, lon, hour, result):
+def init_db():
     """
-    Saves the prediction request and result to a CSV file for auditing.
+    Initializes the SQLite Database. 
+    Creates the 'logs' table automatically if it doesn't exist.
     """
-    log_entry = {
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "lat": lat,
-        "lon": lon,
-        "hour": hour,
-        "is_hotspot": result["is_hotspot"],
-        "probability": result["probability"],
-        "status": result["status"]
-    }
-    
-    df = pd.DataFrame([log_entry])
-    
-    file_exists = os.path.isfile(LOG_PATH)
-    df.to_csv(LOG_PATH, mode='a', index=False, header=not file_exists)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TEXT,
+            lat REAL,
+            lon REAL,
+            hour INTEGER,
+            is_hotspot BOOLEAN,
+            probability REAL,
+            status TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def log_prediction_sql(lat, lon, hour, result):
+    """
+    Saves the prediction request and result to the SQLite database.
+    Uses parameterized queries (?, ?) to prevent SQL injection.
+    """
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO logs (timestamp, lat, lon, hour, is_hotspot, probability, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+        lat, 
+        lon, 
+        hour, 
+        result["is_hotspot"], 
+        result["probability"], 
+        result["status"]
+    ))
+    conn.commit()
+    conn.close()
+
+init_db()
 
 def get_hotspot_prediction(lat, lon, hour):
     try:
@@ -47,7 +75,7 @@ def get_hotspot_prediction(lat, lon, hour):
             }
         }
         
-        log_prediction(lat, lon, hour, result)
+        log_prediction_sql(lat, lon, hour, result)
         
         return result
     except Exception as e:
@@ -55,4 +83,4 @@ def get_hotspot_prediction(lat, lon, hour):
 
 if __name__ == "__main__":
     print(get_hotspot_prediction(34.04, -118.26, 22))
-    print(f"Prediction saved to {LOG_PATH}")
+    print(f"Prediction saved to SQLite Database at: {DB_PATH}")
