@@ -102,7 +102,6 @@ Run backend and frontend on separate terminals.
 **Terminal 1 — Backend (API + DB):**
 ```bash
 uvicorn api.index:app --reload
-# → http://127.0.0.1:8000
 ```
 
 **Terminal 2 — Frontend (Streamlit):**
@@ -140,6 +139,6 @@ Nishit Patel, Pranav Adhikari, Pragun, Unique Bhakta Shrestha, Sameera Simha J
 
 ## License
 
-MIT — Free to use, modify, build upon.
+MIT
 
 > **Disclaimer:** Academic and experimental. Predictions are probabilistic and must never be sole basis for any law enforcement decision.
