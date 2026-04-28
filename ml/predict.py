@@ -9,6 +9,7 @@ MODEL_PATH = os.path.join(BASE_DIR, "../models/hotspot_model.pkl")
 DB_PATH = os.path.join(BASE_DIR, "../data/predictions.db")
 
 def init_db():
+    """Initializes the SQLite Database with the complete 6-feature schema."""
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
@@ -30,26 +31,32 @@ def init_db():
     conn.close()
 
 def log_prediction_sql(lat, lon, hour, day_of_week, month, is_weekend, result):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO logs (timestamp, lat, lon, hour, day_of_week, month, is_weekend, is_hotspot, probability, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        lat, lon, hour, day_of_week, month, is_weekend,
-        result["is_hotspot"],
-        result["probability"],
-        result["status"]
-    ))
-    conn.commit()
-    conn.close()
+    """Securely logs the 6-feature prediction to the database."""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO logs (timestamp, lat, lon, hour, day_of_week, month, is_weekend, is_hotspot, probability, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            lat, lon, hour, day_of_week, month, is_weekend,
+            result["is_hotspot"],
+            result["probability"],
+            result["status"]
+        ))
+        conn.commit()
+        conn.close()
+    except sqlite3.OperationalError as e:
+        print(f"Database Schema Error: {e}")
+        print("CRITICAL FIX: You must delete your existing 'data/predictions.db' file. The database schema has upgraded to include dates, and needs to be rebuilt.")
 
 init_db()
 
 def get_hotspot_prediction(lat, lon, hour, day_of_week, month, is_weekend):
     try:
         model = joblib.load(MODEL_PATH)
+        
         input_data = pd.DataFrame(
             [[lat, lon, hour, day_of_week, month, is_weekend]],
             columns=['lat_grid', 'lon_grid', 'hour', 'day_of_week', 'month', 'is_weekend']
@@ -87,5 +94,5 @@ if __name__ == "__main__":
         month=now.month,
         is_weekend=1 if now.weekday() >= 5 else 0
     )
-    print(result)
+    print(f"Prediction Output: {result}")
     print(f"Saved to: {DB_PATH}")
