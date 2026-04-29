@@ -72,7 +72,6 @@ else:
 
 os.makedirs(STATIC_DIR, exist_ok=True)
 
-# 1. Generate & Save Confusion Matrix
 cm = confusion_matrix(y_test, y_pred)
 plt.figure(figsize=(6, 5))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False,
