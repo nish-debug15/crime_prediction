@@ -144,6 +144,5 @@ with tab3:
     else:
         st.dataframe(logs_df, use_container_width=True, hide_index=True)
         
-        # Add a manual refresh button
         if st.button("Refresh Audit Logs"):
             st.rerun()
